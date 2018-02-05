@@ -1,25 +1,18 @@
 <?php include_once 'page_top.php'; ?>
 <?php
-$page_title = 'User Creation';
-$table_name = 'User Details';
-$action_page = 'PROCESS/user_reg_process.php';
+$page_title = 'Location Slots';
+$table_name = 'Location Slot Details';
+$action_page = 'PROCESS/slot_process.php';
 ?>
 <?php 
-if(!empty($_SESSION['USER'])){
 include 'header_user.php'; 
-}else{
- include 'header_site.php';    
-}
 ?>
 
 <?php
-$name ='';
-$email ='';
-$mobile ='';
-$gender_male_check ='';
-$gender_female_check ='';
-$status = '1';
-$status_check = '';
+$slot_name ='';
+$vehicle_type ='';
+$status_check ='';
+$parking_area_id ='';
 $id = '0';
 $method ='insert';
 if(!empty($_GET['action']) && !empty($_GET['id']) ){
@@ -28,15 +21,11 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
         $method ='update';
         $page_title = $page_title.' - Update';
         
-       $result =$query->select('user','*',['id'=>$_GET['id']]) ;
+       $result =$query->select('parking_area','*',['id'=>$_GET['id']]) ;
        $row=  mysqli_fetch_array($result);
         $id =$row['id'];
-        $name =$row['name'];
-        $email =$row['email'];
-        $mobile =$row['mobile'];
-        $gender_male_check =($row['gender'] == 'Male')?'checked':'';
-        $gender_female_check =($row['gender'] == 'Female')?'checked':'';
-        $status = $row['status'];
+        $location =$row['location'];
+        $description =$row['description'];
         $status_check = ($row['status'] == '1')?'checked':'';
        
     }else if($_GET['action'] == 'delete'){
@@ -73,65 +62,68 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                     </div>
                     <div class="card-body">
 
-                        <form id="user_registration" method="post" action="<?php echo $action_page; ?>">
+                        <form id="location_management" method="post" action="<?php echo $action_page; ?>">
                             <input type="hidden" class="form-control"  name="id" value="<?php echo $id; ?>">
                             <input type="hidden" class="form-control"  name="method" value="<?php echo $method; ?>">
-                            <div class="row">
+                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Name <span class="mandatory">*</span></label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Your name" value="<?php echo $name; ?>">
+                                        <label>Locations <span class="mandatory">*</span></label>
+                                        <?php $getlocation =$query->select('parking_area','*',['status' =>'1']); ?>
+                                        <select class="form-control" id="parking_area_id" name="parking_area_id">
+                                            <option value="" >Select</option>
+                                           <?php foreach ($getlocation as  $value){ ?> 
+                                           <?php $select =($value['id'] =$location)?'selected':''; ?> 
+                                            <option value="<?php echo $value['id']; ?>" <?php echo $select; ?>><?php echo $value['location'].'-'.$value['description']; ?></option>
+                                           <?php } ?> 
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Vehicle Type <span class="mandatory">*</span></label>
+                                        <?php $getvehicle_type =$query->select('vehicle_type','*',['status' =>'1']); ?>
+                                        <select class="form-control" id="vehicle_type" name="vehicle_type">
+                                            <option value="" >Select</option>
+                                           <?php foreach ($getvehicle_type as  $value){ ?> 
+                                           <?php $select =($value['id'] =$vehicle_type)?'selected':''; ?> 
+                                            <option value="<?php echo $value['id']; ?>" <?php echo $select; ?>><?php echo $value['vehicle_type']; ?></option>
+                                           <?php } ?> 
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Email <span class="mandatory">*</span></label>
-                                        <input type="text" class="form-control" id="email" name="email" placeholder="Enter Your Valid Email" value="<?php echo $email; ?>">
+                                        <label>Slot Name <span class="mandatory">*</span></label>
+                                        <input type="text" class="form-control" id="slot_name" name="slot_name" placeholder="Enter Slot name" value="<?php echo $slot_name; ?>">
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Mobile <span class="mandatory">*</span></label>
-                                        <input type="text" class="form-control" id="mobile" name="mobile" maxlength="10" placeholder="Enter Your Mobile Number" value="<?php echo $mobile; ?>">
-                                    </div>
-                                </div>
-                                    </div>
+                           
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Gender <span class="mandatory">*</span></label>
-                                        <div class="options">
-                                            <label>Male</label><input type="radio"  id="gender-m" name="gender"  value="Male" <?php echo $gender_male_check; ?>>
-                                            <label>Female</label><input type="radio"  id="gender" name="gender"  value="Female" <?php echo $gender_female_check; ?>>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php if(!empty($_SESSION['privilage'])){ ?>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Login Status</label>
+                                        <label>Status</label>
                                         <div class="options">
                                             <label>Set To Active</label><input type="checkbox"  id="status" name="status"   value="1" <?php echo $status_check; ?> >
                                         </div>
                                     </div>
                                 </div>
-                                <?php }else{ ?>
-                                <input type="hidden"  id="status" name="status"   value="<?php echo $status; ?>"  >
-                                <?php } ?>
                             </div>
                             <button type="submit" class="btn btn-info btn-fill pull-right">Submit</button>
                             <div class="clearfix"></div>
                         </form>
                     </div>
+                    </div>
                 </div>
             </div>
         </div>
         <!--Table-->
-        <?php if(!empty($_SESSION['privilage'])){ ?>
+        <?php if(!empty($_SESSION['privilage'])){  ?>
         <div class="row">
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
@@ -143,10 +135,9 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                                     <table class="table table-hover table-striped">
                                         <thead>
                                             <th>Sl No.</th>
-                                            <th>Name</th>
-                                            <th>Mobile</th>
-                                            <th>Email</th>
-                                            <th>Gender</th>
+                                            <th>Location</th>
+                                            <th>Description</th>
+                                            <th>Slot Name</th>
                                             <th>Status</th>
                                             <th>Edit</th>
                                             <th>Delete</th>
@@ -155,16 +146,15 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                                             <?php 
                                             //get user details
                                             $slno = 1;
-                                            $result = $query->select('user','*',['role' =>'user']);
+                                            $result = $query->select('parking_area PA','*',[],'',['parking_slots PS'=>'PA.id = PS.parking_area_id']);
                                             if(!empty($result)){
                                             while ($row=  mysqli_fetch_assoc($result)){ 
                                                 ?>
                                             <tr>
                                                 <td><?php echo $slno++; ?></td>
-                                                <td><?php echo $row['name']; ?></td>
-                                                <td><?php echo $row['mobile']; ?></td>
-                                                <td><?php echo $row['email']; ?></td>
-                                                <td><?php echo $row['gender']; ?></td>
+                                                <td><?php echo $row['location']; ?></td>
+                                                <td><?php echo $row['description']; ?></td>
+                                                <td><?php echo $row['slot_name']; ?></td>
                                                 <td><?php echo $row['status']; ?></td>
                                                 <td><a href="?action=edit&id=<?php echo $row['id'];?>"><button type="button" class="btn">Edit</button></a></td>
                                                 <td>

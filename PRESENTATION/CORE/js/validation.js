@@ -127,6 +127,16 @@ jQuery(document).ready(function ($) {
             },
         },
     });
+    $("#location_management").validate({
+        rules: {
+            location: {
+                required: true,
+            },
+            description: {
+                required: true,
+            },
+        },
+    });
     
 
 

@@ -1,14 +1,14 @@
 <?php
 define('PROJECT', true);
 // Database Connection Variables
-define('DOMAIN', "localhost");
-define('USERNAME', "root");
-define('PASSWORD', "");
+define('DOMAIN', "192.168.1.3");
+define('USERNAME', "admin");
+define('PASSWORD', "redhat");
 define('DATABASE', "parking_assist");
 ///////////////////////////////////////////////////////
 
 //  Base URL
-define('BASEURL', "http://localhost/sample-three-tier");
+define('BASEURL', "http://192.168.1.3/parking-assist");
 ////////////////////////////////////////////////////////
 
 
