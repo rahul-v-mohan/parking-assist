@@ -1,10 +1,10 @@
 <?php
-
 include 'process_common.php';
-$table_name = 'parking_area';
+$table_name = 'parking_slots';
 $where['id'] = trim($_POST['id']);
-$field_values['location'] = trim($_POST['location']);
-$field_values['description'] = trim($_POST['description']);
+$field_values['slot_name'] = trim($_POST['slot_name']);
+$field_values['vehicle_type'] = trim($_POST['vehicle_type']);
+$field_values['parking_area_id'] = trim($_POST['parking_area_id']);
 $field_values['status'] = (isset($_POST['status'])) ? $_POST['status'] : 0;
 
 $method = $_POST['method'];
@@ -14,10 +14,10 @@ $method = $_POST['method'];
 // INSERT
 if ($method == 'insert') {
 
-
     $result = $query->insert($table_name, $field_values);    
     if (!empty($result)) {
             $_SESSION['MSG'] = 'Successfully inserted ';
+ 
     } else {
         $_SESSION['MSG'] = 'Not Inserted!!! Please try again';
     }
@@ -46,4 +46,4 @@ if ($method == 'delete') {
         $_SESSION['MSG'] = 'Somethng went wrong!!! Please try again';
     }
 }
-header("location:../location_management.php");
+        header("location:../slot_management.php");

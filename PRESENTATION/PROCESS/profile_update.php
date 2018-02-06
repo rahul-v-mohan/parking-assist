@@ -1,7 +1,6 @@
 <?php
 
 include 'process_common.php';
-include '/../../HELPERS/GMAIL/mail_function.php';
 $table_name = 'user';
 $where['id'] = trim($_POST['id']);
 $field_values['name'] = trim($_POST['name']);

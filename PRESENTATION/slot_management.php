@@ -21,20 +21,14 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
         $method ='update';
         $page_title = $page_title.' - Update';
         
-       $result =$query->select('parking_area','*',['id'=>$_GET['id']]) ;
+       $result =$query->select('parking_slots','*',['id'=>$_GET['id']]) ;
        $row=  mysqli_fetch_array($result);
         $id =$row['id'];
-        $location =$row['location'];
-        $description =$row['description'];
+        $slot_name =$row['slot_name'];
+        $vehicle_type =$row['vehicle_type'];
+        $parking_area_id =$row['parking_area_id'];
         $status_check = ($row['status'] == '1')?'checked':'';
        
-    }else if($_GET['action'] == 'delete'){
-       $response =$query->delete('user','id',$_GET['id']);
-       if(!empty($response)){
-            $_SESSION['MSG'] = 'Deleted Successfully';
-       }else{
-           $_SESSION['MSG'] = 'Not able to delete';
-       }
     }
 }
 ?>
@@ -72,8 +66,8 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                                         <?php $getlocation =$query->select('parking_area','*',['status' =>'1']); ?>
                                         <select class="form-control" id="parking_area_id" name="parking_area_id">
                                             <option value="" >Select</option>
-                                           <?php foreach ($getlocation as  $value){ ?> 
-                                           <?php $select =($value['id'] =$location)?'selected':''; ?> 
+                                           <?php while($value=  mysqli_fetch_assoc($getlocation)){ ?> 
+                                           <?php $select =($value['id'] ==$parking_area_id)?'selected':''; ?> 
                                             <option value="<?php echo $value['id']; ?>" <?php echo $select; ?>><?php echo $value['location'].'-'.$value['description']; ?></option>
                                            <?php } ?> 
                                         </select>
@@ -87,8 +81,8 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                                         <?php $getvehicle_type =$query->select('vehicle_type','*',['status' =>'1']); ?>
                                         <select class="form-control" id="vehicle_type" name="vehicle_type">
                                             <option value="" >Select</option>
-                                           <?php foreach ($getvehicle_type as  $value){ ?> 
-                                           <?php $select =($value['id'] =$vehicle_type)?'selected':''; ?> 
+                                           <?php while($value=  mysqli_fetch_assoc($getvehicle_type)){  ?> 
+                                           <?php $select =($value['id'] ==$vehicle_type)?'selected':''; ?> 
                                             <option value="<?php echo $value['id']; ?>" <?php echo $select; ?>><?php echo $value['vehicle_type']; ?></option>
                                            <?php } ?> 
                                         </select>
@@ -135,8 +129,8 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                                     <table class="table table-hover table-striped">
                                         <thead>
                                             <th>Sl No.</th>
-                                            <th>Location</th>
-                                            <th>Description</th>
+                                            <th>Location Description</th>
+                                            <th>Vehicle Type</th>
                                             <th>Slot Name</th>
                                             <th>Status</th>
                                             <th>Edit</th>
@@ -146,14 +140,19 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                                             <?php 
                                             //get user details
                                             $slno = 1;
-                                            $result = $query->select('parking_area PA','*',[],'',['parking_slots PS'=>'PA.id = PS.parking_area_id']);
+                                            $select ='PS.*,PA.location,PA.description,VT.vehicle_type ';
+                                            $join =[
+                                                'parking_slots PS'=>'PA.id = PS.parking_area_id',
+                                                'vehicle_type VT'=>'VT.id = PS.vehicle_type',
+                                                ];
+                                            $result = $query->select('parking_area PA',$select,[],'',$join);
                                             if(!empty($result)){
                                             while ($row=  mysqli_fetch_assoc($result)){ 
                                                 ?>
                                             <tr>
                                                 <td><?php echo $slno++; ?></td>
-                                                <td><?php echo $row['location']; ?></td>
-                                                <td><?php echo $row['description']; ?></td>
+                                                <td><?php echo $row['location'].'-'.$row['description']; ?></td>
+                                                <td><?php echo $row['vehicle_type']; ?></td>
                                                 <td><?php echo $row['slot_name']; ?></td>
                                                 <td><?php echo $row['status']; ?></td>
                                                 <td><a href="?action=edit&id=<?php echo $row['id'];?>"><button type="button" class="btn">Edit</button></a></td>

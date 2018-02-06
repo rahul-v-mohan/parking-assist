@@ -47,7 +47,7 @@ class query_core extends dboperation {
         return $this->execute($qry);
     }
 
-    function select($table, $getfield, $where=array(), $operand="AND",$join=array()) {
+    function select($table, $getfield, $where=array(), $operand="AND",$join=array(),$group_by ='') {
         // Arranging where condition
         $query_where="";
         if(!empty($where)){
@@ -66,7 +66,7 @@ class query_core extends dboperation {
         }
         ///////////////////////////////////////////
         
-         $qry = "select $getfield from $table $query_join $query_where";
+         $qry = "select $getfield from $table $query_join $query_where $group_by ";
 
         $res = $this->execute($qry);
         return $res;

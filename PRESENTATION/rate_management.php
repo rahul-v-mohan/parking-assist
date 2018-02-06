@@ -1,17 +1,17 @@
 <?php include_once 'page_top.php'; ?>
 <?php
-$page_title = 'Parking Location';
-$table_name = 'Location Details';
-$action_page = 'PROCESS/location_process.php';
+$page_title = 'Rate Management';
+$table_name = 'Rate Details';
+$action_page = 'PROCESS/rate_process.php';
 ?>
 <?php 
 include 'header_user.php'; 
 ?>
 
 <?php
-$location ='';
-$description ='';
-$status_check ='';
+$rate_perhour ='';
+$vehicle_type ='';
+$parking_area_id ='';
 $id = '0';
 $method ='insert';
 if(!empty($_GET['action']) && !empty($_GET['id']) ){
@@ -20,12 +20,12 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
         $method ='update';
         $page_title = $page_title.' - Update';
         
-       $result =$query->select('parking_area','*',['id'=>$_GET['id']]) ;
+       $result =$query->select('slot_rate','*',['id'=>$_GET['id']]) ;
        $row=  mysqli_fetch_array($result);
         $id =$row['id'];
-        $location =$row['location'];
-        $description =$row['description'];
-        $status_check = ($row['status'] == '1')?'checked':'';
+        $rate_perhour =$row['rate_perhour'];
+        $vehicle_type =$row['vehicle_type'];
+        $parking_area_id =$row['parking_area_id'];
        
     }
 }
@@ -57,22 +57,45 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                         <form id="location_management" method="post" action="<?php echo $action_page; ?>">
                             <input type="hidden" class="form-control"  name="id" value="<?php echo $id; ?>">
                             <input type="hidden" class="form-control"  name="method" value="<?php echo $method; ?>">
-                            <div class="row">
+                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Location <span class="mandatory">*</span></label>
-                                        <input type="text" class="form-control" id="location" name="location" placeholder="Enter Location name" value="<?php echo $location; ?>">
+                                        <label>Locations <span class="mandatory">*</span></label>
+                                        <?php $getlocation =$query->select('parking_area','*',['status' =>'1']); ?>
+                                        <select class="form-control" id="parking_area_id" name="parking_area_id">
+                                            <option value="" >Select</option>
+                                           <?php while($value=  mysqli_fetch_assoc($getlocation)){ ?> 
+                                           <?php $select =($value['id'] ==$parking_area_id)?'selected':''; ?> 
+                                            <option value="<?php echo $value['id']; ?>" <?php echo $select; ?>><?php echo $value['location'].'-'.$value['description']; ?></option>
+                                           <?php } ?> 
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Vehicle Type <span class="mandatory">*</span></label>
+                                        <?php $getvehicle_type =$query->select('vehicle_type','*',['status' =>'1']); ?>
+                                        <select class="form-control" id="vehicle_type" name="vehicle_type">
+                                            <option value="" >Select</option>
+                                           <?php while($value=  mysqli_fetch_assoc($getvehicle_type)){  ?> 
+                                           <?php $select =($value['id'] ==$vehicle_type)?'selected':''; ?> 
+                                            <option value="<?php echo $value['id']; ?>" <?php echo $select; ?>><?php echo $value['vehicle_type']; ?></option>
+                                           <?php } ?> 
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Description <span class="mandatory">*</span></label>
-                                        <textarea rows="6" class="form-control" id="description" name="description" placeholder="Enter Location Description" ><?php echo $description; ?></textarea>
+                                        <label>Slot Name <span class="mandatory">*</span></label>
+                                        <input type="text" class="form-control" id="slot_name" name="slot_name" placeholder="Enter Slot name" value="<?php echo $slot_name; ?>">
                                     </div>
                                 </div>
                             </div>
+                           
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -104,8 +127,9 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                                     <table class="table table-hover table-striped">
                                         <thead>
                                             <th>Sl No.</th>
-                                            <th>Location</th>
-                                            <th>Description</th>
+                                            <th>Location Description</th>
+                                            <th>Vehicle Type</th>
+                                            <th>Slot Name</th>
                                             <th>Status</th>
                                             <th>Edit</th>
                                             <th>Delete</th>
@@ -114,14 +138,20 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                                             <?php 
                                             //get user details
                                             $slno = 1;
-                                            $result = $query->select('parking_area','*');
+                                            $select ='PS.*,PA.location,PA.description,VT.vehicle_type ';
+                                            $join =[
+                                                'parking_slots PS'=>'PA.id = PS.parking_area_id',
+                                                'vehicle_type VT'=>'VT.id = PS.vehicle_type',
+                                                ];
+                                            $result = $query->select('parking_area PA',$select,[],'',$join);
                                             if(!empty($result)){
                                             while ($row=  mysqli_fetch_assoc($result)){ 
                                                 ?>
                                             <tr>
                                                 <td><?php echo $slno++; ?></td>
-                                                <td><?php echo $row['location']; ?></td>
-                                                <td><?php echo $row['description']; ?></td>
+                                                <td><?php echo $row['location'].'-'.$row['description']; ?></td>
+                                                <td><?php echo $row['vehicle_type']; ?></td>
+                                                <td><?php echo $row['slot_name']; ?></td>
                                                 <td><?php echo $row['status']; ?></td>
                                                 <td><a href="?action=edit&id=<?php echo $row['id'];?>"><button type="button" class="btn">Edit</button></a></td>
                                                 <td>
