@@ -1,6 +1,5 @@
 
 function ajax_call(base_url,data,url) {
-    
     jQuery.ajax({
         url: base_url +'/'+ url,
         dataType: 'json',

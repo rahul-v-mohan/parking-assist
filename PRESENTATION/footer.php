@@ -31,4 +31,10 @@
 <script src="assets/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script>
 <!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
 <script src="assets/js/demo.js"></script>
+<?php 
+if(!empty($script_path)){ 
+    foreach ($script_path as $path){
+    ?>
+<script src="<?php echo $path; ?>"></script>
+    <?php }} ?>
 </html>
