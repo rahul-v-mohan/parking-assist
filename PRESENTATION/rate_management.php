@@ -90,22 +90,12 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Slot Name <span class="mandatory">*</span></label>
-                                        <input type="text" class="form-control" id="slot_name" name="slot_name" placeholder="Enter Slot name" value="<?php echo $slot_name; ?>">
+                                        <label>Rate Per Hour <span class="mandatory">*</span></label>
+                                        <input type="text" class="form-control" id="rate_perhour" name="rate_perhour" placeholder="Enter Rate" value="<?php echo $rate_perhour; ?>">
                                     </div>
                                 </div>
                             </div>
                            
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Status</label>
-                                        <div class="options">
-                                            <label>Set To Active</label><input type="checkbox"  id="status" name="status"   value="1" <?php echo $status_check; ?> >
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <button type="submit" class="btn btn-info btn-fill pull-right">Submit</button>
                             <div class="clearfix"></div>
                         </form>
@@ -129,8 +119,7 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                                             <th>Sl No.</th>
                                             <th>Location Description</th>
                                             <th>Vehicle Type</th>
-                                            <th>Slot Name</th>
-                                            <th>Status</th>
+                                            <th>Rate Per Hour</th>
                                             <th>Edit</th>
                                             <th>Delete</th>
                                         </thead>
@@ -138,12 +127,12 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                                             <?php 
                                             //get user details
                                             $slno = 1;
-                                            $select ='PS.*,PA.location,PA.description,VT.vehicle_type ';
+                                            $select ='SR.*,PA.location,PA.description,VT.vehicle_type ';
                                             $join =[
-                                                'parking_slots PS'=>'PA.id = PS.parking_area_id',
-                                                'vehicle_type VT'=>'VT.id = PS.vehicle_type',
+                                                'parking_area PA'=>'PA.id = SR.parking_area_id',
+                                                'vehicle_type VT'=>'VT.id = SR.vehicle_type',
                                                 ];
-                                            $result = $query->select('parking_area PA',$select,[],'',$join);
+                                            $result = $query->select('slot_rate SR',$select,[],'',$join);
                                             if(!empty($result)){
                                             while ($row=  mysqli_fetch_assoc($result)){ 
                                                 ?>
@@ -151,8 +140,7 @@ if(!empty($_GET['action']) && !empty($_GET['id']) ){
                                                 <td><?php echo $slno++; ?></td>
                                                 <td><?php echo $row['location'].'-'.$row['description']; ?></td>
                                                 <td><?php echo $row['vehicle_type']; ?></td>
-                                                <td><?php echo $row['slot_name']; ?></td>
-                                                <td><?php echo $row['status']; ?></td>
+                                                <td><?php echo $row['rate_perhour']; ?></td>
                                                 <td><a href="?action=edit&id=<?php echo $row['id'];?>"><button type="button" class="btn">Edit</button></a></td>
                                                 <td>
                                                     <form method="post" action="<?php echo $action_page; ?>">
