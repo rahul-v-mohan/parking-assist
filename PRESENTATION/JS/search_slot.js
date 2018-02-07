@@ -5,11 +5,19 @@ jQuery(document).ready(function ($) {
     var start_time = $('#start_time').val();
     var end_time = $('#end_time').val();
     if (location != '' && vehicle_type != '' && date != '' && start_time != '' && end_time != '') {
-    $('#slot-search-area').html('');
-    var data = {date: date, location: location, vehicle_type: vehicle_type, start_time: start_time, end_time: end_time};
-    getslot(base_url, data, '/PRESENTATION/PROCESS/ajax_common.php?request=search_slot');
+        $('#slot-search-area').html('');
+        var data = {date: date, location: location, vehicle_type: vehicle_type, start_time: start_time, end_time: end_time};
+        getslot(base_url, data, '/PRESENTATION/PROCESS/ajax_common.php?request=search_slot');
 
     }
+    $("#parking_area_id,#vehicle_type,#date,#start_time,#end_time").change(function () {
+        if (location != '' && vehicle_type != '' && date != '' && start_time != '' && end_time != '') {
+            $('#slot-search-area').html('');
+            var data = {date: date, location: location, vehicle_type: vehicle_type, start_time: start_time, end_time: end_time};
+            getslot(base_url, data, '/PRESENTATION/PROCESS/ajax_common.php?request=search_slot');
+
+        }
+    });
 });
 
 function getslot(base_url, data, url) {
