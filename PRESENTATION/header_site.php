@@ -53,6 +53,12 @@
                             <p>Create Account</p>
                         </a>
                     </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="search_slot.php">
+                            <i class="nc-icon nc-bullet-list-67"></i>
+                            <p>Search Slot</p>
+                        </a>
+                    </li>
                     <li>
                         <a class="nav-link" href="./contact.php">
                             <i class="nc-icon nc-pin-3"></i>

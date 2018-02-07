@@ -10,15 +10,21 @@ jQuery(document).ready(function ($) {
         getslot(base_url, data, '/PRESENTATION/PROCESS/ajax_common.php?request=search_slot');
 
     }
-    $("#parking_area_id,#vehicle_type,#date,#start_time,#end_time").change(function () {
+    $("#search-slot").click(function () {
+        location = $('#parking_area_id').val();
+        vehicle_type = $('#vehicle_type').val();
+        date = $('#date').val();
+        start_time = $('#start_time').val();
+        end_time = $('#end_time').val();
         if (location != '' && vehicle_type != '' && date != '' && start_time != '' && end_time != '') {
-            $('#slot-search-area').html('');
+            $('#slot-search-area').html('Searching !!!');
             var data = {date: date, location: location, vehicle_type: vehicle_type, start_time: start_time, end_time: end_time};
             getslot(base_url, data, '/PRESENTATION/PROCESS/ajax_common.php?request=search_slot');
 
         }
     });
 });
+
 
 function getslot(base_url, data, url) {
     var html = "";
@@ -34,12 +40,14 @@ function getslot(base_url, data, url) {
                 html += '<thead>';
                 html += '<th>Sl No.</th>';
                 html += '<th>Slot Name</th>';
+                html += '<th>Booking</th>';
                 html += '</thead>';
                 html += '<tbody>';
                 $.each(response.data, function (key, value) {
                     html += '<tr>';
                     html += '<td>' + slno + '</td>';
                     html += '<td>' + value['slot_name'] + '</td>';
+                    html += '<td><button id="'+value['id']+'">Booking</button></td>';
                     html += '</tr>';
                     slno++;
                 });

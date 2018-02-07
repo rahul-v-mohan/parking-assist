@@ -5,7 +5,11 @@ $table_name = 'Search Slot Details';
 $action_page = 'PROCESS/search_process.php';
 ?>
 <?php 
+if(!empty($_SESSION['USER'])){
 include 'header_user.php'; 
+}else{
+ include 'header_site.php';    
+}
 ?>
 <?php
 $script_path =[
@@ -44,9 +48,7 @@ $end_time =(!empty($_GET['end_time']))?$_GET['end_time']:'';
                     </div>
                     <div class="card-body">
 
-                        <form id="location_management" method="post" action="<?php echo $action_page; ?>">
-                            <input type="hidden" class="form-control"  name="id" value="<?php echo $id; ?>">
-                            <input type="hidden" class="form-control"  name="method" value="<?php echo $method; ?>">
+                        <form id="search_slot" method="post" action="<?php echo $action_page; ?>">
                              <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -99,17 +101,14 @@ $end_time =(!empty($_GET['end_time']))?$_GET['end_time']:'';
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-info btn-fill pull-right">Submit</button>
+                            <button type="button" id="search-slot" class="btn btn-info btn-fill pull-right">Search</button>
                             <div class="clearfix"></div>
                         </form>
                     </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--Table-->
-        <?php if(!empty($location) &&!empty($vehicle_type) && !empty($date)&& !empty($start_time)&& !empty($end_time)){  ?>
-        <div class="row">
+<div class="row">
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
                                 <div class="card-header ">
@@ -123,6 +122,8 @@ $end_time =(!empty($_GET['end_time']))?$_GET['end_time']:'';
                         </div>
                        
                     </div>
-                <?php } ?>
+        </div>
+        <!--Table-->
+        
     </div>
     <?php include 'footer.php' ?>
