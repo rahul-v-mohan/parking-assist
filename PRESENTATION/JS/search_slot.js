@@ -23,6 +23,33 @@ jQuery(document).ready(function ($) {
 
         }
     });
+    $(document).on('click', '.booking_button', function () {
+        var slot_id = $(this).attr('id');
+        location = $('#parking_area_id').val();
+        vehicle_type = $('#vehicle_type').val();
+        date = $('#date').val();
+        start_time = $('#start_time').val();
+        end_time = $('#end_time').val();
+        data = {slot_id: slot_id, date: date, location: location, vehicle_type: vehicle_type, start_time: start_time, end_time: end_time};
+        $.ajax({
+            url: base_url +'/PRESENTATION/PROCESS/ajax_common.php?request=bookingdata',
+            dataType: 'json',
+            type: 'post',
+            data: data,
+            success: function (response) {
+                if(response.login == '1'){
+                    window.location = base_url +'/PRESENTATION/booking.php';
+                }else{
+                    window.location = base_url +'/PRESENTATION/login.php';
+                }
+                
+            },
+        });
+    });
+            $('#date').datepicker({
+            dateFormat: 'yy-mm-dd',
+            minDate:0,
+        });
 });
 
 
@@ -40,6 +67,7 @@ function getslot(base_url, data, url) {
                 html += '<thead>';
                 html += '<th>Sl No.</th>';
                 html += '<th>Slot Name</th>';
+                html += '<th>Payment Per Hour</th>';
                 html += '<th>Booking</th>';
                 html += '</thead>';
                 html += '<tbody>';
@@ -47,7 +75,7 @@ function getslot(base_url, data, url) {
                     html += '<tr>';
                     html += '<td>' + slno + '</td>';
                     html += '<td>' + value['slot_name'] + '</td>';
-                    html += '<td><button id="'+value['id']+'">Booking</button></td>';
+                    html += '<td><button class="booking_button" id="' + value['id'] + '">Booking</button></td>';
                     html += '</tr>';
                     slno++;
                 });
