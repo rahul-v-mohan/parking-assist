@@ -9,7 +9,7 @@ $role = (!empty($_SESSION['USER']['role']))?$_SESSION['USER']['role']:'';
                 'Slot Management'=>'slot_management.php',
                 'Rate Management'=>'rate_management.php',
                 'Search Slot'=>'search_slot.php',
-                'Reservation Management'=>'rate_management.php',
+                'Booking Details'=>'booking_details.php',
                 ];
         }elseif ($role ==  'staff') {
             $menu = [
@@ -19,13 +19,13 @@ $role = (!empty($_SESSION['USER']['role']))?$_SESSION['USER']['role']:'';
                 'Slot Management'=>'slot_management.php',
                 'Rate Management'=>'rate_management.php',
                 'Search Slot'=>'search_slot.php',
-                'Reservation Management'=>'rate_management.php',
+                'Booking Details'=>'booking_details.php',
                 ];
         }elseif ($role ==  'user') {
             $menu = [
                 'Profile'=>'profile.php',
                 'Search Slot'=>'search_slot.php',
-                'Reservation Management'=>'rate_management.php',
+                'Booking Details'=>'booking_details.php',
                 ];
         } else {
            $menu =[];

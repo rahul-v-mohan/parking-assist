@@ -14,7 +14,7 @@ class query extends query_core
                     (reservation_starttime < '$start_time' AND reservation_endtime > '$end_time' )
                 )
                 ) as BK ON PS.id = BK.slot_id WHERE BK.id IS NULL AND PS.parking_area_id ='$location'
-                    AND PS.vehicle_type ='$vehicle_type'
+                    AND PS.vehicle_type ='$vehicle_type' AND PS.status = '1'
                 GROUP BY PS.id";
         $res = $this->execute($qry);
         return $res;

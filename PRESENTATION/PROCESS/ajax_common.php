@@ -52,6 +52,7 @@ function bookingdata() {
         'location'=>$location,'date'=>$date,
         'start_time'=>$start_time,'vehicle_type'=>$vehicle_type,
         'end_time'=>$end_time,'start_time'=>$start_time,
+        'slot_id'=>$slot_id
         ];
     $response['login'] =(!empty($_SESSION['USER']))?'1':'0';
     echo json_encode($response);

@@ -147,12 +147,14 @@ jQuery(document).ready(function ($) {
             },
             start_time: {
                 required: true,
+                time: true,
             },
             vehicle_type: {
                 required: true,
             },
             end_time: {
                 required: true,
+                time: true,
             },
         },
     });

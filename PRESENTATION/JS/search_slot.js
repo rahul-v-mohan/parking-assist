@@ -50,6 +50,10 @@ jQuery(document).ready(function ($) {
             dateFormat: 'yy-mm-dd',
             minDate:0,
         });
+            $('#start_time,#end_time').datetimepicker({
+            datepicker: false,
+            format: 'H:i',
+        });
 });
 
 
@@ -67,7 +71,6 @@ function getslot(base_url, data, url) {
                 html += '<thead>';
                 html += '<th>Sl No.</th>';
                 html += '<th>Slot Name</th>';
-                html += '<th>Payment Per Hour</th>';
                 html += '<th>Booking</th>';
                 html += '</thead>';
                 html += '<tbody>';
